@@ -1,0 +1,6 @@
+<!--
+  This view is used to render the installed plugins page.
+-->
+<div>
+  This plugin is adds CocoaPods (http://cocoapods.org) support to your Jenkins Build
+</div>

@@ -3,13 +3,31 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.476</version><!-- which version of Jenkins is this plugin built against? -->
+    <version>1.480</version>
   </parent>
 
   <groupId>com.thoughtsonmobile</groupId>
   <artifactId>cocoapods-integration</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
+
+  <name>CocoaPods Jenkins Integration</name>
+  <organization>
+  	<name>Thoughts on Mobile</name>
+  	<url>http://www.thoughtsonmobile.com</url>
+  </organization>
+  <developers>
+  	<developer>
+  	  <id>ljanzik</id>
+  	  <name>Leif Janzik</name>
+  	  <email>leif.janzik@gmail.com</email>
+  	</developer>
+  </developers>
+  <scm>
+  	<url>http://github.com/thoughtsOnMobile/cocoapods-jenkins-integration</url>
+  	<connection>scm:git:ssh://github.com/thoughtsOnMobile/cocoapods-jenkins-integration.git</connection>
+  	<developerConnection>scm:git:ssh://git@github.com/thoughtsOnMobile/cocoapods-jenkins-integration.git</developerConnection>
+  </scm>
 
    <build>
        <plugins>
@@ -60,9 +78,12 @@
       <url>http://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
-  <name>CocoaPods Jenkins Integration</name>
-  <organization>
-  	<name>Thoughts on Mobile</name>
-  	<url>http://www.thoughtsonmobile.com</url>
-  </organization>
+  <description>A plugin for the Jenkins Continous Integration Server to excecute CocoaPods goals during a build</description>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/CocoaPods+Integration</url>
+  <distributionManagement>
+    <repository>
+      <id>maven.jenkins-ci.org</id>
+      <url>http://maven.jenkins-ci.org:8081/content/repositories/releases/</url>
+    </repository>
+  </distributionManagement>
 </project>

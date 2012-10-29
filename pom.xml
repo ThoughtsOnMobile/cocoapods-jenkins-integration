@@ -24,7 +24,7 @@
   	</developer>
   </developers>
   <scm>
-  	<url>http://github.com/thoughtsOnMobile/cocoapods-jenkins-integration</url>
+  	<url>http://github.com/ThoughtsOnMobile/cocoapods-jenkins-integration</url>
   	<connection>scm:git:https://github.com/ThoughtsOnMobile/cocoapods-jenkins-integration</connection>
   	<developerConnection>scm:git:ssh://git@github.com/ThoughtsOnMobile/cocoapods-jenkins-integration.git</developerConnection>
   </scm>

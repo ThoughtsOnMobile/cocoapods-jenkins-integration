@@ -104,10 +104,10 @@ public class CocoaPodsBuilder extends Builder {
       env.putAll(build.getBuildVariables());
 
       final ArgumentListBuilder args = new ArgumentListBuilder();
-      args.addTokenized("pod install");
+      args.addTokenized("pod repo update");
 
       final ArgumentListBuilder args2 = new ArgumentListBuilder();
-      args2.addTokenized("pod update");
+      args2.addTokenized("pod install");
 
       final int resultInstall =
         launcher.decorateFor(build.getBuiltOn()).launch().cmds(args).envs(env)

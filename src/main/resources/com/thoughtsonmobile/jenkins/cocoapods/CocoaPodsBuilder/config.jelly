@@ -9,7 +9,7 @@
     Creates a checkbox
     When checked, the Pods folder will be deleted before refreshing.
   -->
-  <f:entry title="Clean &quotPods&quot; folder " field="cleanpods">
+  <f:entry title="Clean &quot;Pods&quot; folder" field="cleanpods">
     <f:checkbox />
   </f:entry>
 </j:jelly>

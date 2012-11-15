@@ -15,26 +15,29 @@
  */
 package com.thoughtsonmobile.jenkins.cocoapods;
 
-import hudson.EnvVars;
-import hudson.Extension;
-import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Builder;
-import hudson.util.ArgumentListBuilder;
-
 import java.io.IOException;
 
 import org.kohsuke.stapler.DataBoundConstructor;
+
+import hudson.EnvVars;
+import hudson.Extension;
+import hudson.Launcher;
+
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.BuildListener;
+
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.Builder;
+
+import hudson.util.ArgumentListBuilder;
 
 /**
  * CocoaPods Builder. This builder performs a "pod install" and "pod
  * update" if it is configured in a jenkins build.
  *
  * @author Leif Janzik (leif.janzik@gmail.com)
- * @version 0.1
+ * @version 0.2
  */
 public class CocoaPodsBuilder extends Builder {
   /**
@@ -61,17 +64,25 @@ public class CocoaPodsBuilder extends Builder {
      * @return always true
      */
     @Override
-	public boolean isApplicable(final Class<? extends AbstractProject> aClass) {
+    public boolean isApplicable(final Class<?extends AbstractProject> aClass) {
       return true;
     }
   }
 
+  /**
+   * if true &quot;Pods&quot; folder will be removed before refreshing.
+   */
+  private final boolean cleanPods;
+
 /**
    * Creates a new CocoaPodsBuilder object.
    *
+   * @param cleanpods value of per-project checkbox, if true the &quot;pod&quot; folder will
+   *   be removed before refreshing pods
    */
   @DataBoundConstructor
-  public CocoaPodsBuilder() {
+  public CocoaPodsBuilder(final boolean cleanpods) {
+    cleanPods = cleanpods;
   }
 
   /**
@@ -94,13 +105,19 @@ public class CocoaPodsBuilder extends Builder {
    * @return true if build step was successfull, false otherwise.
    */
   @Override
-  public boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher,
-                         final BuildListener listener) {
+  public boolean perform(final AbstractBuild<?, ?> build,
+                         final Launcher launcher, final BuildListener listener) {
     try {
       final EnvVars env = build.getEnvironment(listener);
       env.putAll(build.getBuildVariables());
 
       final ArgumentListBuilder args = new ArgumentListBuilder();
+
+      if (cleanPods) {
+        args.addTokenized("touch Pods");
+        args.addTokenized("rm -r -f Pods");
+      }
+
       args.addTokenized("pod repo update");
 
       final ArgumentListBuilder args2 = new ArgumentListBuilder();
@@ -113,7 +130,7 @@ public class CocoaPodsBuilder extends Builder {
         launcher.decorateFor(build.getBuiltOn()).launch().cmds(args2).envs(env)
                  .stdout(listener).pwd(build.getModuleRoot()).join();
 
-      return resultInstall == 0 && resultUpdate == 0;
+      return (resultInstall == 0) && (resultUpdate == 0);
     } catch (final IOException e) {
       e.printStackTrace();
     } catch (final InterruptedException e) {

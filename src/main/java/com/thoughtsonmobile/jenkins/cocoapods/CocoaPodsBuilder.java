@@ -15,26 +15,23 @@
  */
 package com.thoughtsonmobile.jenkins.cocoapods;
 
+import hudson.EnvVars;
+import hudson.Extension;
+import hudson.Launcher;
+import hudson.model.BuildListener;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.Builder;
+import hudson.util.ArgumentListBuilder;
+
 import java.io.IOException;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import hudson.EnvVars;
-import hudson.Extension;
-import hudson.Launcher;
-
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
-
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Builder;
-
-import hudson.util.ArgumentListBuilder;
-
 /**
  * CocoaPods Builder. This builder performs a "pod install" and "pod
- * update" if it is configured in a jenkins build
+ * update" if it is configured in a jenkins build.
  *
  * @author Leif Janzik (leif.janzik@gmail.com)
  * @version 0.1
@@ -57,14 +54,14 @@ public class CocoaPodsBuilder extends Builder {
     }
 
     /**
-     * checks if plugin is available in project
+     * checks if plugin is available in project.
      *
-     * @param aClass DOCUMENT ME!
+     * @param aClass project class
      *
      * @return always true
      */
     @Override
-    public boolean isApplicable(final Class<?extends AbstractProject> aClass) {
+	public boolean isApplicable(final Class<? extends AbstractProject> aClass) {
       return true;
     }
   }
@@ -78,7 +75,7 @@ public class CocoaPodsBuilder extends Builder {
   }
 
   /**
-   * returns builder descriptor
+   * returns builder descriptor.
    *
    * @return builder descriptor
    */
@@ -88,7 +85,7 @@ public class CocoaPodsBuilder extends Builder {
   }
 
   /**
-   * This method is called during a jenkins build
+   * This method is called during a jenkins build.
    *
    * @param build current build
    * @param launcher the launcher
@@ -97,7 +94,7 @@ public class CocoaPodsBuilder extends Builder {
    * @return true if build step was successfull, false otherwise.
    */
   @Override
-  public boolean perform(final AbstractBuild build, final Launcher launcher,
+  public boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher,
                          final BuildListener listener) {
     try {
       final EnvVars env = build.getEnvironment(listener);
@@ -116,7 +113,7 @@ public class CocoaPodsBuilder extends Builder {
         launcher.decorateFor(build.getBuiltOn()).launch().cmds(args2).envs(env)
                  .stdout(listener).pwd(build.getModuleRoot()).join();
 
-      return (resultInstall == 0) && (resultUpdate == 0);
+      return resultInstall == 0 && resultUpdate == 0;
     } catch (final IOException e) {
       e.printStackTrace();
     } catch (final InterruptedException e) {

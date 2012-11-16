@@ -377,12 +377,12 @@
             <ondemand>
                 <after>
                     <assignment>true</assignment>
-                    <leftParenthesis>false</leftParenthesis>
+                    <leftParenthesis>true</leftParenthesis>
                     <parameter>false</parameter>
                     <types>
-                        <extends>false</extends>
-                        <implements>false</implements>
-                        <throws>false</throws>
+                        <extends>true</extends>
+                        <implements>true</implements>
+                        <throws>true</throws>
                     </types>
                 </after>
                 <before>

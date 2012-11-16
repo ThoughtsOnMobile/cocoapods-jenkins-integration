@@ -105,7 +105,8 @@ public class CocoaPodsBuilder extends Builder {
    * @return true if build step was successfull, false otherwise.
    */
   @Override
-  public boolean perform(final AbstractBuild<?, ?> build,
+  public boolean perform(
+                         final AbstractBuild<?, ?> build,
                          final Launcher launcher, final BuildListener listener) {
     try {
       final EnvVars env = build.getEnvironment(listener);

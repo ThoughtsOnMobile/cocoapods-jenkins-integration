@@ -12,4 +12,10 @@
   <f:entry title="Clean &quot;Pods&quot; folder" field="cleanpods">
     <f:checkbox />
   </f:entry>
+  <!--
+    When checked, cocoapods is verbose.
+  -->
+  <f:entry title="${%Verbose}" field="verbose">
+    <f:checkbox />
+  </f:entry>
 </j:jelly>

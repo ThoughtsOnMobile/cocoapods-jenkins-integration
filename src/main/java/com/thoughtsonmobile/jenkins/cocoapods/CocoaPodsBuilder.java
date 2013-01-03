@@ -74,6 +74,11 @@ public class CocoaPodsBuilder extends Builder {
    */
   private final boolean cleanPods;
 
+  /**
+   * if {@code true} cocoapods will be verbose in the log trail.
+   */
+  private final boolean verbose;
+
 /**
    * Creates a new CocoaPodsBuilder object.
    *
@@ -81,8 +86,9 @@ public class CocoaPodsBuilder extends Builder {
    *   be removed before refreshing pods
    */
   @DataBoundConstructor
-  public CocoaPodsBuilder(final boolean cleanpods) {
+  public CocoaPodsBuilder(final boolean cleanpods, final boolean verbose) {
     cleanPods = cleanpods;
+    this.verbose = verbose;
   }
 
   /**
@@ -123,6 +129,10 @@ public class CocoaPodsBuilder extends Builder {
 
       final ArgumentListBuilder args2 = new ArgumentListBuilder();
       args2.addTokenized("pod install");
+
+      if (verbose) {
+	      args2.add("--verbose");
+      }
 
       final int resultInstall =
         launcher.decorateFor(build.getBuiltOn()).launch().cmds(args).envs(env)

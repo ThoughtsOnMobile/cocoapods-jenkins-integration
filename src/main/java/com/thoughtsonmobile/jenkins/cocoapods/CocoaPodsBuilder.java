@@ -21,6 +21,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.EnvVars;
 import hudson.Extension;
+import hudson.FilePath;
 import hudson.Launcher;
 
 import hudson.model.AbstractBuild;
@@ -79,6 +80,23 @@ public class CocoaPodsBuilder extends Builder {
    */
   private final boolean verbose;
 
+  /**
+   * Where the Xcode project resides (ie. where the working directory cocoapods should be run with 
+   */
+  private final String projectRoot;
+
+  public boolean getCleanPods() {
+      return cleanPods;
+  }
+
+  public boolean getVerbose() {
+      return verbose;
+  }
+
+  public String getProjectRoot() {
+      return projectRoot;
+  }
+
 /**
    * Creates a new CocoaPodsBuilder object.
    *
@@ -86,9 +104,10 @@ public class CocoaPodsBuilder extends Builder {
    *   be removed before refreshing pods
    */
   @DataBoundConstructor
-  public CocoaPodsBuilder(final boolean cleanpods, final boolean verbose) {
+  public CocoaPodsBuilder(final boolean cleanpods, final boolean verbose, final String projectRoot) {
     cleanPods = cleanpods;
     this.verbose = verbose;
+    this.projectRoot = projectRoot;
   }
 
   /**
@@ -118,6 +137,8 @@ public class CocoaPodsBuilder extends Builder {
       final EnvVars env = build.getEnvironment(listener);
       env.putAll(build.getBuildVariables());
 
+      FilePath projectRootPath = build.getWorkspace().child(projectRoot);
+
       final ArgumentListBuilder args = new ArgumentListBuilder();
 
       if (cleanPods) {
@@ -136,10 +157,10 @@ public class CocoaPodsBuilder extends Builder {
 
       final int resultInstall =
         launcher.decorateFor(build.getBuiltOn()).launch().cmds(args).envs(env)
-                 .stdout(listener).pwd(build.getModuleRoot()).join();
+                 .stdout(listener).pwd(projectRootPath).join();
       final int resultUpdate  =
         launcher.decorateFor(build.getBuiltOn()).launch().cmds(args2).envs(env)
-                 .stdout(listener).pwd(build.getModuleRoot()).join();
+                 .stdout(listener).pwd(projectRootPath).join();
 
       return (resultInstall == 0) && (resultUpdate == 0);
     } catch (final IOException e) {
